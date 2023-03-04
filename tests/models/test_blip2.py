@@ -150,3 +150,28 @@ class TestBlip2:
         captions = model.generate({"image": image}, num_captions=3)
 
         assert len(captions) == 3
+
+
+
+def test_blip2_opt2p7b():
+        # loads BLIP2-OPT-2.7b caption model, without finetuning on coco.
+        model, vis_processors, _ = load_model_and_preprocess(
+            name="blip2_opt", model_type="pretrain_opt2.7b", is_eval=True, device=device
+        )
+
+        # preprocess the image
+        # vis_processors stores image transforms for "train" and "eval" (validation / testing / inference)
+        image = vis_processors["eval"](raw_image).unsqueeze(0).to(device)
+
+        # generate caption
+        caption = model.generate({"image": image})
+
+        assert caption == ["the merlion fountain in singapore"]
+
+        # generate multiple captions
+        captions = model.generate({"image": image}, num_captions=3)
+
+        assert len(captions) == 3
+
+
+t1=test_blip2_opt2p7b()
